@@ -21,7 +21,6 @@ Object.keys(units).forEach(function (unit) {
 
 var middleware = function (seconds) {
     return function (req, res, next) {
-        console.log("seconds", seconds)
         if (seconds === 0) {
             res.header(headerKey, noCacheKey)
         }
