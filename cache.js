@@ -42,7 +42,7 @@ function CacheControl (options) {
 
 CacheControl.prototype = {
     calculate: function (unit, value) {
-        if (unit === 0 || value === 0 || unit === false) return middleware(0)
+        if (unit === 0 || value === 0 || unit === false) return 0
 
         var unitValue = units[unit]
         if (!unitValue) throw new Error("CacheControl unknown unit " + unit)
