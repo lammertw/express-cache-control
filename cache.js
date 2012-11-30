@@ -16,49 +16,60 @@ units.year = units.day * 365
 
 // add plural units
 Object.keys(units).forEach(function (unit) {
-    units[unit + "s"] = units[unit]
+  units[unit + "s"] = units[unit]
 })
 
-var middleware = function (seconds) {
-    return function (req, res, next) {
-        if (seconds === 0) {
-            res.header(headerKey, noCacheKey)
-        }
-        else {
-            res.header(headerKey, maxAgeKey + "=" + seconds + ", " + mustRevalidateKey)
-        }
-
-        next()
+var middleware = function (seconds, dontOverwriteIfSet, copyFromReq) {
+  return function (req, res, next) {
+    if (copyFromReq && req.header(headerKey)) {
+      res.header(headerKey, req.header(headerKey));
+      return next()
     }
+
+    if (dontOverwriteIfSet && res.header(headerKey)) {
+      return next()
+    }
+
+    if (seconds === 0) {
+      res.header(headerKey, noCacheKey)
+    }
+    else {
+      res.header(headerKey, maxAgeKey + "=" + seconds + ", " + mustRevalidateKey)
+    }
+
+    next()
+  }
 }
 
 function CacheControl (options) {
-    if (!options) options = {}
+  if (!options) options = {}
 
-    this.override = options.override
+  this.override = options.override
+  this.dontOverwriteIfSet = options.dontOverwriteIfSet
+  this.copyFromReq = options.copyFromReq
 
-    this.middleware = _.bind(this.middleware, this)
+  this.middleware = _.bind(this.middleware, this)
 }
 
 CacheControl.prototype = {
-    calculate: function (unit, value) {
-        if (unit === 0 || value === 0 || unit === false) return 0
+  calculate: function (unit, value) {
+    if (unit === 0 || value === 0 || unit === false) return 0
 
-        var unitValue = units[unit]
-        if (!unitValue) throw new Error("CacheControl unknown unit " + unit)
+    var unitValue = units[unit]
+    if (!unitValue) throw new Error("CacheControl unknown unit " + unit)
 
-        if (this.override !== undefined) {
-            return this.override
-        }
-
-        if (!value) value = 1 // default to 1 (unless it is 0 which we already checked) so they can cache("day")
-
-        return unitValue * value
-    },
-
-    middleware: function (unit, value) {
-        return middleware(this.calculate(unit, value))
+    if (this.override !== undefined) {
+        return this.override
     }
+
+    if (!value) value = 1 // default to 1 (unless it is 0 which we already checked) so they can cache("day")
+
+    return unitValue * value
+  },
+
+  middleware: function (unit, value) {
+    return middleware(this.calculate(unit, value), this.dontOverwriteIfSet, this.copyFromReq)
+  }
 }
 
 module.exports = CacheControl

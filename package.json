@@ -2,11 +2,17 @@
   "author": "Addison Higham <addisonj@gmail.com> (github.com/addisonj)",
   "name": "express-cache-control",
   "description": "A small middleware library for setting cache control headers",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "homepage": "github.com/idottv/express-cache-control",
+  "contributors": [
+    "Jamison Dance <jergason@gmail.com> (http://jamisondance.com)"
+  ]
   "repository": {
     "type": "git",
     "url": "github.com/idottv/express-cache-control.git"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha test/*"
   },
   "main": "cache.js",
   "engines": {
@@ -15,6 +21,8 @@
   "dependencies": {
     "underscore": "1.4.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "~1.7.2"
+  },
   "optionalDependencies": {}
 }
