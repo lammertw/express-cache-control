@@ -9,12 +9,20 @@
     "url": "github.com/idottv/express-cache-control.git"
   },
   "main": "cache.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha -R spec --compilers coffee:coffee-script tests.coffee"
+  },
   "engines": {
     "node": ">= 0.6.x < 0.9.0"
   },
   "dependencies": {
     "underscore": "1.4.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "~1.7.3",
+    "coffee-script": "~1.4.0",
+    "express": "~3.0.3",
+    "request": "~2.12.0"
+  },
   "optionalDependencies": {}
 }
