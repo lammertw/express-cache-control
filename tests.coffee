@@ -17,10 +17,6 @@ month = day * 30
 year = day * 365
 
 
-describe "sanity", ->
-  it "should exist", ->
-    assert.ok CacheControl
-
 describe "calculation", ->
   it "should calculate correctly given various units and values", ->
     cc = new CacheControl()
@@ -102,14 +98,10 @@ describe "calculation", ->
 
   it "should throw an error for an invalid unit", ->
     cc = new CacheControl()
-    errored = false
 
-    try
+    assert.throws ->
       cc.calculate "lightyears"
-    catch e
-      errored = true
-
-    assert.equal true, errored
+    , Error
 
 
 describe "middleware", ->
