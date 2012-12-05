@@ -139,3 +139,13 @@ describe "middleware", ->
       assert.equal res.headers["cache-control"], "no-cache"
       done()
 
+  it "should be bound to its context", (done) ->
+    cache = new CacheControl().middleware
+
+    handler = (req, res) ->
+      res.send "ok"
+
+    makeServer cache("hours", 2), handler, (res) ->
+      assert.equal res.headers["cache-control"], "max-age=7200, must-revalidate"
+      done()
+
