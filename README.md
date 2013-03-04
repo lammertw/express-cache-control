@@ -30,8 +30,3 @@ weeks
 months
 years
 
-
-
-
-TODO:
-Write some tests
